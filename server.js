@@ -1,30 +1,54 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const morgan = require('morgan');
+const colors = require('colors');
 
-//Routes files
-const bootcamps = require('./routes/bootcamps');
+const { connectDB } = require('./config/db');
 
 //Load env vars
 dotenv.config({path: './config/config.env'});
 
+
+// Connect to database in mongodb Atlas
+
+
+//Routes files
+const bootcamps = require('./routes/bootcamps');
+
 const app = express();
 
-const logger = (req, res, next) => {
-  req.hello = "Hello world from logger middleware.";
-  console.log(`${req.method} ${req.protocol}://${req.get('host')}${req.originalUrl}`);
-  next();
+// Dev logging middleware
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
 }
-
-app.use(logger);
 
 //Mount routers
 app.use('/api/v1/bootcamps', bootcamps);
 
 const PORT = process.env.PORT || 5001;
 
-app.listen(
-  PORT,
-  console.log(
-    `Server running in ${process.env.NODE_ENV} mode on port ${PORT}.`
-  )
-);
+
+connectDB()
+  .then((res) => {
+    console.log(`DB Connected to ${res.connections[0].host}`.yellow.bgGreen);
+    const server = app.listen(
+      PORT,
+      console.log(
+        `Server running in ${process.env.NODE_ENV} mode on port ${PORT}.`
+          .green
+      )
+    );
+    // Handle unhandled promise rejections
+    process.on('unhandledRejection', (err, promise) => {
+      console.log(`Error: ${err.message}`.red);
+      // Close server and exit process
+      server.close(() => process.exit(1));
+    });
+  })
+  .catch((e) => {
+  console.log('DB Connection Failed!'.red);
+  console.error(e.message);
+  process.exit(1);
+});
+
+
