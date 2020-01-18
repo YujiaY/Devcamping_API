@@ -3,8 +3,8 @@ const ErrorResponse = require('../utils/errorResponse');
 const errorHandler = (err, req, res, next) => {
   let error = {...err};
 
-  //TODO: ??? Try to omit this
-  // error.message = err.message;
+  // TODO: Try to omit this
+  error.message = err.message;
 
   //Log to console for dev
   // console.log(`${err.name.red}: ${err.value}`);
@@ -13,7 +13,7 @@ const errorHandler = (err, req, res, next) => {
 
   //Mongoose bad ObjectId
   if (err.name === 'CastError') {
-    const message = `Bootcamp not found with id of ${err.value}.`;
+    const message = `${err.value} is not a valid ObjectId. Please check again.`;
     error = new ErrorResponse(message, 404);
   };
 
