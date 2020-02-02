@@ -3,7 +3,7 @@ const asyncHandler = require("../middleware/asyncHandler");
 const Course = require("../models/Course");
 const Bootcamp = require("../models/Bootcamp");
 
-// @desc     Get all bootcamps
+// @desc     Get all courses
 // @route    GET /api/v1/courses
 // @route    GET /api/v1/bootcamps/:bootcampId/courses
 // @access   Public
