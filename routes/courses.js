@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router({ mergeParams: true });
 
-const { protect, authorize } = require("../middleware/auth");
-
 const {
   getCourses,
   getCourse,
@@ -12,6 +10,8 @@ const {
 } = require("../controllers/courses");
 
 const Course = require("../models/Course");
+
+const { protect, authorize } = require("../middleware/auth");
 const genericResults = require("../middleware/genericResults");
 
 router

@@ -11,11 +11,11 @@ const {
 } = require("../controllers/bootcamps");
 
 const Bootcamp = require("../models/Bootcamp");
-const genericResults = require("../middleware/genericResults");
 
 // Include other resource routers
 const courseRouter = require("./courses");
 
+const genericResults = require("../middleware/genericResults");
 const { protect, authorize } = require("../middleware/auth");
 
 // Re-route into other resource routers
