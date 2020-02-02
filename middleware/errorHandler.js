@@ -1,7 +1,7 @@
-const ErrorResponse = require('../utils/errorResponse');
+const ErrorResponse = require("../utils/errorResponse");
 
 const errorHandler = (err, req, res, next) => {
-  let error = {...err};
+  let error = { ...err };
 
   // TODO: Try to omit this
   error.message = err.message;
@@ -12,27 +12,29 @@ const errorHandler = (err, req, res, next) => {
   // console.log(err);
 
   //Mongoose bad ObjectId
-  if (err.name === 'CastError') {
+  if (err.name === "CastError") {
     const message = `${err.value} is not a valid ObjectId. Please check again.`;
     error = new ErrorResponse(message, 404);
-  };
+  }
 
   //Mongoose duplicate key
   if (err.code === 11000) {
-    const message = `Duplicate field: ${Object.keys(err.keyValue)}, value: ${Object.values(err.keyValue)}.`;
+    const message = `Duplicate field: ${Object.keys(
+      err.keyValue
+    )}, value: ${Object.values(err.keyValue)}.`;
     error = new ErrorResponse(message, 400);
   }
 
   //Mongoose validation error
-  if (err.name === 'ValidationError') {
+  if (err.name === "ValidationError") {
     const message = Object.values(err.errors).map(val => val.message);
     error = new ErrorResponse(message, 400);
   }
 
   res.status(error.statusCode || 500).json({
-    sucess: false,
-    error: error.message || 'Server Error.'
+    success: false,
+    error: error.message || "Server Error."
   });
-}
+};
 
 module.exports = errorHandler;
