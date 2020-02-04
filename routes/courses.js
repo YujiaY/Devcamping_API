@@ -17,10 +17,16 @@ const genericResults = require("../middleware/genericResults");
 router
   .route("/")
   .get(
-    genericResults(Course, {
-      path: "bootcamp",
-      select: "name description"
-    }),
+    genericResults(Course, [
+      {
+        path: "bootcamp",
+        select: "name description"
+      },
+      {
+        path: "user",
+        select: "name role"
+      }
+    ]),
     getCourses
   )
   .post(protect, authorize("publisher", "admin"), addCourse);

@@ -17,7 +17,7 @@ const genericResults = (model, populate) => async (req, res, next) => {
   queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
 
   // Create DB find resource
-  query = model.find(JSON.parse(queryStr)).populate(populate);
+  query = model.find(JSON.parse(queryStr));
 
   // Add select fields to query
   if (req.query.select) {

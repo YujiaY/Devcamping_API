@@ -28,10 +28,16 @@ router.route("/radius/:zipcode/:distance").get(getBootcampInRadius);
 router
   .route("/")
   .get(
-    genericResults(Bootcamp, {
-      path: "courses",
-      select: "title description -bootcamp"
-    }),
+    genericResults(Bootcamp, [
+      {
+        path: "courses",
+        select: "title description -bootcamp"
+      },
+      {
+        path: "user",
+        select: "name role"
+      }
+    ]),
     getBootcamps
   )
   .post(protect, authorize("publisher", "admin"), createBootcamp);

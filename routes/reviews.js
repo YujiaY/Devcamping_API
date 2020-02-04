@@ -17,10 +17,16 @@ const genericResults = require("../middleware/genericResults");
 router
   .route("/")
   .get(
-    genericResults(Review, {
-      path: "bootcamp",
-      select: "name description"
-    }),
+    genericResults(Review, [
+      {
+        path: "bootcamp",
+        select: "name description"
+      },
+      {
+        path: "user",
+        select: "name"
+      }
+    ]),
     getReviews
   )
   .post(protect, authorize("user", "admin"), addReview);
