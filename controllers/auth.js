@@ -25,7 +25,7 @@ exports.register = asyncHandler(async (req, res, next) => {
 // @route    POST /api/v1/auth/login
 // @access   Public
 exports.login = asyncHandler(async (req, res, next) => {
-  const { email, password } = req.body;
+  let { email, password } = req.body;
 
   // Validate email and password
   if (!email || !password) {
@@ -33,6 +33,11 @@ exports.login = asyncHandler(async (req, res, next) => {
       new ErrorResponse("Please provide both email and password.", 400)
     );
   }
+
+  // Use JS built-in escape() function to sanitize the input
+  // to prevent MongoDB query selector injection.
+  email = escape(email);
+  password = escape(password);
 
   const user = await User.findOne({ email }).select("+password");
 
